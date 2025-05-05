@@ -1,4 +1,43 @@
 import streamlit as st
+
+# --- Simple user database ---
+USERS = {
+    "admin": {"password": "admin123", "role": "admin"},
+    "caller": {"password": "caller123", "role": "telecaller"}
+}
+
+# --- Login Handler ---
+def login():
+    st.title("🔐 Login")
+
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+
+    if st.button("Login"):
+        user = USERS.get(username)
+        if user and user["password"] == password:
+            st.session_state["logged_in"] = True
+            st.session_state["role"] = user["role"]
+            st.experimental_rerun()
+        else:
+            st.error("Invalid username or password")
+
+# --- Logout Handler ---
+def logout():
+    st.session_state.clear()
+    st.experimental_rerun()
+
+# --- Session check ---
+if "logged_in" not in st.session_state:
+    login()
+    st.stop()
+
+# --- Show logout button ---
+st.sidebar.success(f"Logged in as {st.session_state['role']}")
+if st.sidebar.button("Logout"):
+    logout()
+
+import streamlit as st
 import requests
 import pandas as pd
 
@@ -57,3 +96,10 @@ with tab3:
             st.dataframe(pd.DataFrame(matched))
         except Exception as e:
             st.error(f"Upload failed: {e}")
+import streamlit as st
+
+# --- Simple user database ---
+USERS = {
+    "admin": {"password": "admin123", "role": "admin"},
+    "caller": {"password": "caller123", "role": "telecaller"}
+}
